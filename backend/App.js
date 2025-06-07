@@ -8,6 +8,9 @@ import { errorHandler } from "./src/middleware/error.middleware.js";
 import { HTTPSTATUS } from "./src/config/http.config.js";
 import { catchAsyncError } from "./src/middleware/asyncErrorHandler.js";
 import { ValidationError } from "./src/middleware/AppError.js";
+import "../backend/src/config/passport.config.js";
+import passport from "passport";
+import authRouter from "./src/routes/auth.routes.js";
 
 dotenv.config(); // Load environment variables from .env file
 const BASE_PATH = config.BASE_PATH; // Optional: BASE_PATH for route prefixing (not used in this snippet)
@@ -31,7 +34,8 @@ app.use(
     sameSite: "lax", // CSRF protection: cookie sent on same-site requests or top-level navigation
   })
 );
-
+app.use(passport.initialize());
+app.use(passport.session());
 // CORS configuration to allow frontend origin and credentials (cookies)
 app.use(
   cors({
@@ -49,6 +53,9 @@ app.get(
       .json({ message: `server is running and hit by IPaddress ${req.ip}` });
   })
 );
+
+
+app.use(`${BASE_PATH}/auth`, authRouter);
 // Catch unknown routes (404)
 app.use((req, res, next) => {
   const error = new Error(` Route Not Found for path  - ${req.originalUrl}`);
@@ -56,6 +63,9 @@ app.use((req, res, next) => {
   error.statusCode = HTTPSTATUS.NOT_FOUND;
   next(error);
 });
+
+
+
 
 // middleware
 app.use(errorHandler);

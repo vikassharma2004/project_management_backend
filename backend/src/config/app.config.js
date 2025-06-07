@@ -4,10 +4,10 @@ import getEnv from "../utils/get-env.js";
 
 const AppConfig = () => ({
   NODE_ENV: getEnv("NODE_ENV", "development"),
-  PORT: getEnv("PORT",4000 ),
-BASE_PATH: getEnv("BASE_PATH", "/api"),
+  PORT: getEnv("PORT", 4000),
+  BASE_PATH: getEnv("BASE_PATH", "/api"),
   // MongoDB
-  MONGO_URI: getEnv("MONGO_URI"," " ),
+  MONGO_URI: getEnv("MONGO_URI", " "),
 
   // Session
   SESSION_SECRET: getEnv("SESSION_SECRET", "session_secret_key"),
@@ -23,7 +23,10 @@ BASE_PATH: getEnv("BASE_PATH", "/api"),
 
   // Frontend URLs
   FRONTEND_ORIGIN: getEnv("FORNTEND_ORIGIN", "http://localhost:5173"),
-  FRONTEND_GOOGLE_CALLBACK_URL: getEnv("FRONTEND_CALLBACK_URL", "http://localhost:5173/google/oauth/callback"),
+  FRONTEND_GOOGLE_CALLBACK_URL: getEnv(
+    "FRONTEND_CALLBACK_URL",
+    "http://localhost:5173/google/oauth/callback"
+  ),
 });
 
-export const config=AppConfig();
+export const config = AppConfig();
