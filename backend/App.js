@@ -1,14 +1,13 @@
 import express from "express"; // Importing Express.js to create the server
 import dotenv from "dotenv"; // Loads environment variables from .env file
 import cors from "cors"; // CORS middleware to handle cross-origin requests
-import session from "cookie-session"; // Session middleware using cookies for managing sessions
+import session from "express-session"; // Session middleware using cookies for managing sessions
 import { config } from "./src/config/app.config.js"; // Importing configuration object (environment variables)
 import { connectDB } from "./src/config/database.config.js";
 import { errorHandler } from "./src/middleware/error.middleware.js";
 import { HTTPSTATUS } from "./src/config/http.config.js";
 import { catchAsyncError } from "./src/middleware/asyncErrorHandler.js";
-import { ValidationError } from "./src/middleware/AppError.js";
-import "../backend/src/config/passport.config.js";
+import "../backend/src/config/passport.config.js"
 import passport from "passport";
 import authRouter from "./src/routes/auth.routes.js";
 
@@ -26,12 +25,15 @@ app.use(express.urlencoded({ extended: true }));
 // Session middleware configuration
 app.use(
   session({
-    name: "session", // Name of the cookie
-    keys: [config.SESSION_SECRET], // Secret key(s) to sign the session ID cookie
-    maxAge: 24 * 60 * 60 * 1000, // Cookie expires in 24 hours
-    secure: config.NODE_ENV === "production", // Use HTTPS-only cookie in production
-    httpOnly: true, // Prevents client-side JavaScript from accessing the cookie
-    sameSite: "lax", // CSRF protection: cookie sent on same-site requests or top-level navigation
+    secret: config.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+      maxAge: 24 * 60 * 60 * 1000,
+      httpOnly: true,
+      sameSite: "lax",
+      secure: config.NODE_ENV === "production",
+    },
   })
 );
 app.use(passport.initialize());
@@ -53,9 +55,7 @@ app.get(
       .json({ message: `server is running and hit by IPaddress ${req.ip}` });
   })
 );
-
-
-app.use(`${BASE_PATH}/auth`, authRouter);
+app.use(`${BASE_PATH}/auth`,authRouter);
 // Catch unknown routes (404)
 app.use((req, res, next) => {
   const error = new Error(` Route Not Found for path  - ${req.originalUrl}`);
@@ -63,9 +63,6 @@ app.use((req, res, next) => {
   error.statusCode = HTTPSTATUS.NOT_FOUND;
   next(error);
 });
-
-
-
 
 // middleware
 app.use(errorHandler);

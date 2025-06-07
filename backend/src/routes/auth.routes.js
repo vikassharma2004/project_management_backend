@@ -18,7 +18,8 @@ authRouter.route("/google").get(
 authRouter.route("/google/callback").get(
   // Authenticate the Google callback response
   passport.authenticate("google", {
-    failureRedirect: failureRedirect, // Redirect to frontend if authentication fails
+    failureRedirect: failureRedirect,
+   
   }),
 
   // Controller to handle post-auth logic (e.g., redirect to workspace)

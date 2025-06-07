@@ -6,24 +6,28 @@ import mongoose from "mongoose";
 import { ROLES } from "../enums/role.enum.js";
 import { NotFoundError } from "../middleware/AppError.js";
 import { Member } from "../models/member.model.js";
+
 export const loginOrCreateAccountService = async (data) => {
   const { provider, providerId, displayName, email, picture } = data;
+
+  const session = await mongoose.startSession();
+  console.log("Session started");
+
   try {
-    const session = await mongoose.startSession();
-    console.log("session started");
+    await session.startTransaction();
+    console.log("Transaction started");
 
     let user = await User.findOne({ email });
+
     if (!user) {
-      // create new user if user dosent exit
       user = new User({
         name: displayName,
         email,
-
         profilePicture: { url: picture },
       });
       await user.save({ session });
-      console.log("user created");
-      // create account for user
+      console.log("User created");
+
       const account = new Account({
         userId: user._id,
         provider,
@@ -33,49 +37,45 @@ export const loginOrCreateAccountService = async (data) => {
         picture,
       });
       await account.save({ session });
-      console.log("account created");
-      // create worksapce for user
+      console.log("Account created");
+
       const workspace = new Workspace({
         name: "My Workspace",
-        description: `Workspace  created for for ${user.name}`,
+        description: `Workspace created for ${user.name}`,
         owner: user._id,
       });
       await workspace.save({ session });
-      console.log("workspace created");
+      console.log("Workspace created");
 
-      // get roles
-      const ownerrole = await Role.findOne({ name: ROLES.OWNER }).session(
+      const ownerRole = await Role.findOne({ name: ROLES.OWNER }).session(
         session
       );
-      if (!ownerrole) {
-        throw new NotFoundError("Owner role not found");
-      }
+      console.log(ownerRole)
+      if (!ownerRole) throw new NotFoundError("Owner role not found");
 
-      // add member
       const member = new Member({
         userId: user._id,
-        role: ownerrole._id,
+        role: ownerRole._id,
         workspaceId: workspace._id,
         joinedAt: new Date(),
       });
       await member.save({ session });
-      console.log("member created");
 
       user.currentWorkspace = workspace._id;
-
       await user.save({ session });
-      console.log("user saved");
     }
-    await session.commitTransaction();
-    session.endSession();
-    console.log("session ended");
+    console.log("Member created");
+    console.log("Committing transaction");
 
+    await session.commitTransaction();
+    console.log("Transaction committed");
     return user;
   } catch (error) {
+    console.error("Error during login/create:", error);
     await session.abortTransaction();
-    session.endSession();
     throw error;
   } finally {
     session.endSession();
+    console.log("Session ended");
   }
 };

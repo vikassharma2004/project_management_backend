@@ -24,7 +24,7 @@ passport.use(
         if (!googleId) {
           return done(new NotFoundError("Google ID is missing"), null);
         }
-
+        console.log("profile", profile);
         const user = await loginOrCreateAccountService({
           provider: "GOOGLE",
           providerId: googleId,
@@ -32,14 +32,19 @@ passport.use(
           email,
           picture,
         });
-
+        console.log("before done");
         return done(null, user);
       } catch (error) {
+          console.error("Error in Google Strategy verify:", error);
         return done(error, false);
       }
     }
   )
 );
 
-passport.serializeUser((user, done) => {done(null, user)});
-passport.deserializeUser((user, done) => {done(null, user)});
+passport.serializeUser((user, done) => {
+  done(null, user);
+});
+passport.deserializeUser((user, done) => {
+  done(null, user);
+});
