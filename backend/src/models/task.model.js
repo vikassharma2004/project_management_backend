@@ -20,12 +20,12 @@ const taskSchema=mongoose.Schema({
         default:null
     },
     project:{
-        tpe:mongoose.Schema.Types.ObjectId,
+        type:mongoose.Schema.Types.ObjectId,
         ref:"Project",
         required:true
     },
     workspace:{
-        tpe:mongoose.Schema.Types.ObjectId,
+        type:mongoose.Schema.Types.ObjectId,
         ref:"Workspace",
         required:true
     },
@@ -41,7 +41,7 @@ const taskSchema=mongoose.Schema({
         required:true
     },
     createdBy:{
-        tpe:mongoose.Schema.Types.ObjectId,
+        type:mongoose.Schema.Types.ObjectId,
         ref:"User",
         required:true
     },

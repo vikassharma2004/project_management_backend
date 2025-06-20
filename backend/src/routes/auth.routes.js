@@ -1,7 +1,8 @@
 import express from "express";
 import passport from "passport";
 import { config } from "../config/app.config.js";
-import { googleLoginCallback } from "../controllers/auth.controller.js";
+import { googleLoginCallback, loginUser, Logout, registeruser } from "../controllers/auth.controller.js";
+import { isAuthenticated } from "../middleware/isAuthenticated.js";
 
 const authRouter = express.Router();
 
@@ -25,5 +26,9 @@ authRouter.route("/google/callback").get(
   // Controller to handle post-auth logic (e.g., redirect to workspace)
   googleLoginCallback
 );
+authRouter.route("/register").post(registeruser);
+authRouter.route("/login").post(loginUser);
+authRouter.route("/logout").post(Logout);
+
 
 export default authRouter;
