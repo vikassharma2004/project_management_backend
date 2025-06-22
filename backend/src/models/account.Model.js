@@ -8,7 +8,7 @@ const accountSchema=mongoose.Schema({
     },
     provider:{
         type:String,
-        enum:["GOOGLE","GMAIL","GITHUB","FACEBOOK"],
+        enum:["GOOGLE","EMAIL","GITHUB","FACEBOOK"],
         required:true
     },
     providerId:{

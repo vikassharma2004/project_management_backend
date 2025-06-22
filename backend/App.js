@@ -1,13 +1,21 @@
 import express from "express"; // Importing Express.js to create the server
 import dotenv from "dotenv"; // Loads environment variables from .env file
 import cors from "cors"; // CORS middleware to handle cross-origin requests
-import session from "cookie-session"; // Session middleware using cookies for managing sessions
+import session from "express-session"; // Session middleware using cookies for managing sessions
 import { config } from "./src/config/app.config.js"; // Importing configuration object (environment variables)
 import { connectDB } from "./src/config/database.config.js";
 import { errorHandler } from "./src/middleware/error.middleware.js";
 import { HTTPSTATUS } from "./src/config/http.config.js";
 import { catchAsyncError } from "./src/middleware/asyncErrorHandler.js";
-import { ValidationError } from "./src/middleware/AppError.js";
+import "../backend/src/config/passport.config.js"
+import passport from "passport";
+import authRouter from "./src/routes/auth.routes.js";
+import userRouter from "./src/routes/user.routes.js";
+import { isAuthenticated } from "./src/middleware/isAuthenticated.js";
+import workspaceRouter from "./src/routes/workspace.route.js";
+import MemberRouter from "./src/routes/member.route.js";
+import ProjectRouter from "./src/routes/project.route.js"
+import TaskRouter from "./src/routes/task.route.js";
 
 dotenv.config(); // Load environment variables from .env file
 const BASE_PATH = config.BASE_PATH; // Optional: BASE_PATH for route prefixing (not used in this snippet)
@@ -20,18 +28,33 @@ app.use(express.json());
 // Middleware to parse URL-encoded data (form submissions, etc.)
 app.use(express.urlencoded({ extended: true }));
 
+// Log every incoming request with method, path, headers, and body
+app.use((req, res, next) => {
+  console.log("🔍 Incoming Request:");
+  console.log("Method:", req.method);
+  console.log("Path:", req.originalUrl);
+  console.log("Headers:", req.headers);
+  console.log("Body:", req.body); // May be undefined if body-parsing is missing
+  next();
+});
+
 // Session middleware configuration
 app.use(
   session({
-    name: "session", // Name of the cookie
-    keys: [config.SESSION_SECRET], // Secret key(s) to sign the session ID cookie
-    maxAge: 24 * 60 * 60 * 1000, // Cookie expires in 24 hours
-    secure: config.NODE_ENV === "production", // Use HTTPS-only cookie in production
-    httpOnly: true, // Prevents client-side JavaScript from accessing the cookie
-    sameSite: "lax", // CSRF protection: cookie sent on same-site requests or top-level navigation
+    secret: config.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false,
+    name:"session",
+    cookie: {
+      maxAge: 24 * 60 * 60 * 1000,
+      httpOnly: true,
+      sameSite: "lax",
+      secure: config.NODE_ENV === "production",
+    },
   })
 );
-
+app.use(passport.initialize());
+app.use(passport.session());
 // CORS configuration to allow frontend origin and credentials (cookies)
 app.use(
   cors({
@@ -49,6 +72,12 @@ app.get(
       .json({ message: `server is running and hit by IPaddress ${req.ip}` });
   })
 );
+app.use(`${BASE_PATH}/auth`,authRouter);
+app.use(`${BASE_PATH}/user`,isAuthenticated,userRouter);
+app.use(`${BASE_PATH}/workspace`,isAuthenticated,workspaceRouter);
+app.use(`${BASE_PATH}/member`,isAuthenticated,MemberRouter);
+app.use(`${BASE_PATH}/project`,isAuthenticated,ProjectRouter);
+app.use(`${BASE_PATH}/task`,isAuthenticated,TaskRouter);
 // Catch unknown routes (404)
 app.use((req, res, next) => {
   const error = new Error(` Route Not Found for path  - ${req.originalUrl}`);

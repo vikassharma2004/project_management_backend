@@ -15,7 +15,7 @@ const userSchema = new mongoose.Schema({
     },
     password: {
         type: String,
-        required: true,
+     
        select: false, // exclude by default
     },
     profilePicture:{
@@ -40,6 +40,11 @@ const userSchema = new mongoose.Schema({
     }
 },{timestamps:true});
 
+
+
+
+
+
 userSchema.pre("save", async function (next) {
   // Only hash the password if it has been modified or is new
   if (!this.isModified("password")) {
@@ -54,11 +59,21 @@ userSchema.pre("save", async function (next) {
     return next(err);
   }
 });
+// Instance method to omit password
 
-
+userSchema.methods.OmitPassword = async function () {
+  const userObject = this.toObject();
+  delete userObject.password;
+  return userObject;
+};
 // Instance method to compare plain text password with hashed password
 userSchema.methods.comparePassword = async function (candidatePassword) {
+  if (!this.password) {
+    throw new Error("Password not set on user document");
+  }
   return bcrypt.compare(candidatePassword, this.password);
 };
+
+
 
 export const User = mongoose.model("User", userSchema);

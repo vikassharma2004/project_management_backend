@@ -17,12 +17,12 @@ const projectSchema=mongoose.Schema({
         required:false
     },
     workspace:{
-        tpe:mongoose.Schema.Types.ObjectId,
+        type:mongoose.Schema.Types.ObjectId,
         ref:"Workspace",
         required:true
     },
     createdBy:{
-        tpe:mongoose.Schema.Types.ObjectId,
+        type:mongoose.Schema.Types.ObjectId,
         ref:"User",
         required:true
     }
