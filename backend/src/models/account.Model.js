@@ -1,34 +1,39 @@
 import mongoose from "mongoose";
 
-const accountSchema=mongoose.Schema({
-    userId:{
-        type:mongoose.Schema.Types.ObjectId,
-        ref:"User",
-        required:true
+const accountSchema = mongoose.Schema(
+  {
+    userId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
     },
-    provider:{
-        type:String,
-        enum:["GOOGLE","EMAIL","GITHUB","FACEBOOK"],
-        required:true
+    provider: {
+      type: String,
+      enum: ["GOOGLE", "EMAIL", "GITHUB", "FACEBOOK"],
+      required: true,
     },
-    providerId:{
-        type:String,
-        required:true,
-        unique:true
+    providerId: {
+      type: String,
+      required: true,
+      unique: true,
     },
-    refreshToken:{
-        type:String,
-        default:null
+    refreshToken: {
+      type: String,
+      default: null,
     },
-    tokenExpiery:{
-        type:Date,
-        default:null
-    }
-},{timestamps:true,toJson:{
-    transform(doc,ret){
-        
-        delete ret.refreshToken
-    }
-}})
+    tokenExpiery: {
+      type: Date,
+      default: null,
+    },
+  },
+  {
+    timestamps: true,
+    toJson: {
+      transform(doc, ret) {
+        delete ret.refreshToken;
+      },
+    },
+  }
+);
 
-export const Account=mongoose.model("Account",accountSchema)
+export const Account = mongoose.model("Account", accountSchema);

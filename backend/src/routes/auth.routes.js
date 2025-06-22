@@ -1,8 +1,8 @@
 import express from "express";
 import passport from "passport";
 import { config } from "../config/app.config.js";
-import { googleLoginCallback, loginUser, Logout, registeruser } from "../controllers/auth.controller.js";
-import { isAuthenticated } from "../middleware/isAuthenticated.js";
+import { googleLoginCallback, loginUser, Logout, registeruser } from "../controllers/Auth.controller.js";
+
 
 const authRouter = express.Router();
 

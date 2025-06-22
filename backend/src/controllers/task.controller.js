@@ -105,17 +105,17 @@ export const getSingleTask = catchAsyncError(async (req, res) => {
   });
 });
 
-export const DeleteTaskController=catchAsyncError(async(req,res)=>{
+export const DeleteTaskController = catchAsyncError(async (req, res) => {
   const taskId = taskIdSchema.parse(req.params.id);
- 
+
   const workspaceId = workspaceIdSchema.parse(req.params.workspaceId);
   const userId = req.user?._id;
   // get role of user in workspace
   const { role } = await getMemberRoleInWorkspace(userId, workspaceId);
   // check if user has permission
   roleGuard(role, [permissions.DELETE_TASK]);
-  await deleteTaskService(workspaceId,taskId)
+  await deleteTaskService(workspaceId, taskId);
   return res.status(HTTPSTATUS.OK).json({
     message: "Task deleted successfully",
   });
-})
+});

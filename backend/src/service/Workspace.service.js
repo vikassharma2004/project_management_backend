@@ -4,7 +4,7 @@ import { Member } from "../models/member.model.js";
 import { Project } from "../models/projects.model.js";
 import { Role } from "../models/roles-permission.js";
 import { Task } from "../models/task.model.js";
-import { User } from "../models/user.Model.js";
+import { User } from "../models/user.model.js";
 import { Workspace } from "../models/workspace.model.js";
 import mongoose from "mongoose";
 

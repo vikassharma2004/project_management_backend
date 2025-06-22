@@ -9,7 +9,7 @@ import { config } from "./app.config.js";
 
 import { loginOrCreateAccountService } from "../service/Auth.Service.js";
 import { VerifyUserService } from "../service/Auth.Service.js";
-import { User } from "../models/user.Model.js";
+import { User } from "../models/user.model.js";
 
 passport.use(
   new GoogleStrategy(

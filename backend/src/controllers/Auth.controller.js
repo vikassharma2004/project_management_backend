@@ -61,20 +61,20 @@ export const loginUser = catchAsyncError(async (req, res, next) => {
   })(req, res, next); // ← important: invoke the returned middleware
 });
 
-
-export const Logout=catchAsyncError(async(req,res,next)=>{
- req.logout((err) => {
-  if (err) { return next(err); }
-
-  req.session.destroy((err) => {
+export const Logout = catchAsyncError(async (req, res, next) => {
+  req.logout((err) => {
     if (err) {
       return next(err);
     }
 
-    res.clearCookie("connect.sid");
-    res.clearCookie("session"); // default session cookie name
-    res.status(200).json({ message: "Logged out successfully" });
-  })
+    req.session.destroy((err) => {
+      if (err) {
+        return next(err);
+      }
+
+      res.clearCookie("connect.sid");
+      res.clearCookie("session"); // default session cookie name
+      res.status(200).json({ message: "Logged out successfully" });
+    });
+  });
 });
-  
-})

@@ -1,5 +1,5 @@
 import { BadRequestError } from "../middleware/AppError.js";
-import { User } from "../models/user.Model.js";
+import { User } from "../models/user.model.js";
 
 export const getCuurentUserService = async (id) => {
     const user = await User.findById(id).populate("currentWorkspace").select("-password");

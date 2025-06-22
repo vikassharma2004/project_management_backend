@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+
 import { HTTPSTATUS } from "../config/http.config.js";
 import { permissions } from "../enums/role.enum.js";
 import { catchAsyncError } from "../middleware/asyncErrorHandler.js";
@@ -9,7 +9,7 @@ import {
   getProjectAnalyticsService,
   getProjectByIdAndWorkspaceIdService,
   getProjectsInWorkspaceService,
-  UpdateProjectService,
+  // UpdateProjectService,
 } from "../service/project.service.js";
 import { roleGuard } from "../utils/roleGaurd.js";
 import {
@@ -144,18 +144,17 @@ export const getProjectAnalyticsController = catchAsyncError(
     });
   }
 );
-export const deleteProjectController=catchAsyncError(async(req,res)=>{
+export const deleteProjectController = catchAsyncError(async (req, res) => {
   const projectId = projectIdSchema.parse(req.params.id);
   const workspaceId = workspaceIdSchema.parse(req.params.workspaceId);
   const userId = req.user?._id;
-   // get role of user in workspace
-    const { role } = await getMemberRoleInWorkspace(userId, workspaceId);
-    // check if user has permission
-    roleGuard(role, [permissions.VIEW_ONLY]);
+  // get role of user in workspace
+  const { role } = await getMemberRoleInWorkspace(userId, workspaceId);
+  // check if user has permission
+  roleGuard(role, [permissions.VIEW_ONLY]);
 
-    await deleteProjectService(workspaceId,projectId)
-     return res.status(HTTPSTATUS.OK).json({
-      message: "Project deleted successfully",
-    });
-  
-})
+  await deleteProjectService(workspaceId, projectId);
+  return res.status(HTTPSTATUS.OK).json({
+    message: "Project deleted successfully",
+  });
+});

@@ -1,8 +1,7 @@
 import { NotFoundError } from "../middleware/AppError.js";
 import { Project } from "../models/projects.model.js";
 import { Task } from "../models/task.model.js";
-import { User } from "../models/user.Model.js";
-import { Workspace } from "../models/workspace.model.js";
+
 import mongoose from "mongoose";
 
 //create project

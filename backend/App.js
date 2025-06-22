@@ -7,8 +7,8 @@ import { connectDB } from "./src/config/database.config.js";
 import { errorHandler } from "./src/middleware/error.middleware.js";
 import { HTTPSTATUS } from "./src/config/http.config.js";
 import { catchAsyncError } from "./src/middleware/asyncErrorHandler.js";
-import "./src/config/passport.config.js"
 import passport from "passport";
+import "./src/config/passport.config.js";
 import authRouter from "./src/routes/auth.routes.js";
 import userRouter from "./src/routes/user.routes.js";
 import { isAuthenticated } from "./src/middleware/isAuthenticated.js";
@@ -16,6 +16,16 @@ import workspaceRouter from "./src/routes/workspace.route.js";
 import MemberRouter from "./src/routes/member.route.js";
 import ProjectRouter from "./src/routes/project.route.js"
 import TaskRouter from "./src/routes/task.route.js";
+import fs from "fs";
+import path from "path";
+import { fileURLToPath } from "url";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+const fullPath = path.join(__dirname, "src/config/passport.config.js");
+console.log("Passport config path:", fullPath);
+console.log("File exists?", fs.existsSync(fullPath));
 
 dotenv.config(); // Load environment variables from .env file
 const BASE_PATH = config.BASE_PATH; // Optional: BASE_PATH for route prefixing (not used in this snippet)

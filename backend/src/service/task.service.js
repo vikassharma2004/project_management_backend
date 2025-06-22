@@ -2,7 +2,7 @@ import { BadRequestError, NotFoundError } from "../middleware/AppError.js";
 import { Member } from "../models/member.model.js";
 import { Project } from "../models/projects.model.js";
 import { Task } from "../models/task.model.js";
-import mongoose from "mongoose";
+
 
 // Service to create a new task under a specific project and workspace
 export const createTaskService = async (

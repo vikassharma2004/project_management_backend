@@ -34,7 +34,10 @@ export class BadRequestError extends AppError {
 }
 
 export class InternalServerError extends AppError {
-  constructor(message = "Internal Server Error", errorCode = "INTERNAL_SERVER_ERROR") {
+  constructor(
+    message = "Internal Server Error",
+    errorCode = "INTERNAL_SERVER_ERROR"
+  ) {
     super(message, HTTPSTATUS.INTERNAL_SERVER_ERROR, errorCode);
   }
 }
@@ -47,19 +50,29 @@ export class DuplicateFieldError extends AppError {
 
 export class ValidationError extends AppError {
   constructor(messages = [], errorCode = "VALIDATION_ERROR") {
-    const message = Array.isArray(messages) ? messages.join(". ") : String(messages);
+    const message = Array.isArray(messages)
+      ? messages.join(". ")
+      : String(messages);
     super(message, HTTPSTATUS.BAD_REQUEST, errorCode);
   }
 }
 
 export class InvalidTokenError extends AppError {
   constructor(errorCode = "INVALID_TOKEN") {
-    super("Invalid token. Please log in again.", HTTPSTATUS.UNAUTHORIZED, errorCode);
+    super(
+      "Invalid token. Please log in again.",
+      HTTPSTATUS.UNAUTHORIZED,
+      errorCode
+    );
   }
 }
 
 export class TokenExpiredError extends AppError {
   constructor(errorCode = "TOKEN_EXPIRED") {
-    super("Token expired. Please log in again.", HTTPSTATUS.UNAUTHORIZED, errorCode);
+    super(
+      "Token expired. Please log in again.",
+      HTTPSTATUS.UNAUTHORIZED,
+      errorCode
+    );
   }
 }

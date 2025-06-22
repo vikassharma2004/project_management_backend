@@ -1,5 +1,5 @@
 import { Account } from "../models/account.Model.js";
-import { User } from "../models/user.Model.js";
+import { User } from "../models/user.model.js";
 import { Workspace } from "../models/workspace.model.js";
 import { Role } from "../models/roles-permission.js";
 import mongoose from "mongoose";
