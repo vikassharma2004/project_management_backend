@@ -1,12 +1,16 @@
 import express from "express";
-import { CreateWorkspaceController,getUserAllWorkspace,getWorkspaceById ,getWorkspaceMembers,ChangememberRole,getWorkspaceAnalytics} from "../controllers/workspace.controller.js";
+import { CreateWorkspaceController,getUserAllWorkspace,getWorkspaceById,DeleteWorkspaceById ,UpdateWorkspaceController,getWorkspaceMembers,ChangememberRole,getWorkspaceAnalytics} from "../controllers/workspace.controller.js";
 
 const workspaceRouter = express.Router();
 
 // create new workspace
 workspaceRouter.route("/create/new").post(CreateWorkspaceController)
+// update workspace by id
+workspaceRouter.route("/update/:id").put(UpdateWorkspaceController)
 //change member role 
-workspaceRouter.route("/change/member-role").put(ChangememberRole)
+workspaceRouter.route("/change/member-role/:id").put(ChangememberRole)
+// workspace delete
+workspaceRouter.route("/delete/:id").delete(DeleteWorkspaceById)
 // get all workspace
 workspaceRouter.route("/all").get(getUserAllWorkspace)
 // get workspace by id with members

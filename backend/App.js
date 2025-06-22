@@ -14,6 +14,8 @@ import userRouter from "./src/routes/user.routes.js";
 import { isAuthenticated } from "./src/middleware/isAuthenticated.js";
 import workspaceRouter from "./src/routes/workspace.route.js";
 import MemberRouter from "./src/routes/member.route.js";
+import ProjectRouter from "./src/routes/project.route.js"
+import TaskRouter from "./src/routes/task.route.js";
 
 dotenv.config(); // Load environment variables from .env file
 const BASE_PATH = config.BASE_PATH; // Optional: BASE_PATH for route prefixing (not used in this snippet)
@@ -74,6 +76,8 @@ app.use(`${BASE_PATH}/auth`,authRouter);
 app.use(`${BASE_PATH}/user`,isAuthenticated,userRouter);
 app.use(`${BASE_PATH}/workspace`,isAuthenticated,workspaceRouter);
 app.use(`${BASE_PATH}/member`,isAuthenticated,MemberRouter);
+app.use(`${BASE_PATH}/project`,isAuthenticated,ProjectRouter);
+app.use(`${BASE_PATH}/task`,isAuthenticated,TaskRouter);
 // Catch unknown routes (404)
 app.use((req, res, next) => {
   const error = new Error(` Route Not Found for path  - ${req.originalUrl}`);
