@@ -4,9 +4,9 @@ import { rolepermission } from "./role-permission.js"
 export const roleGuard = (role, requiredPermissions = []) => {
   const permissions = rolepermission[role];
   // If the role doesn't exist or lacks required permissions, throw an exception
-console.log(permissions,
-    "at role gaurd"
-);
+// console.log(permissions,
+//     "at role gaurd"
+// );
 
   const hasPermission = requiredPermissions.every((permission) =>
     permissions.includes(permission)
