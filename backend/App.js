@@ -7,7 +7,7 @@ import { connectDB } from "./src/config/database.config.js";
 import { errorHandler } from "./src/middleware/error.middleware.js";
 import { HTTPSTATUS } from "./src/config/http.config.js";
 import { catchAsyncError } from "./src/middleware/asyncErrorHandler.js";
-import "../backend/src/config/passport.config.js"
+import "./src/config/passport.config.js"
 import passport from "passport";
 import authRouter from "./src/routes/auth.routes.js";
 import userRouter from "./src/routes/user.routes.js";
