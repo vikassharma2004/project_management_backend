@@ -58,7 +58,7 @@ export const getAllWorkSpace = async (userId) => {
     throw err;
   }
 };
-
+//workspace by id
 export const WorkSpaceById = async (workspaceId) => {
   try {
     const workspace = await Workspace.findById(workspaceId).populate("owner");
@@ -74,7 +74,7 @@ export const WorkSpaceById = async (workspaceId) => {
     throw err;
   }
 };
-
+// member in workspace
 export const WorksapceMembers = async (workspaceId) => {
   try {
     const members = await Member.find({ workspaceId })
@@ -91,6 +91,7 @@ export const WorksapceMembers = async (workspaceId) => {
     throw err;
   }
 };
+// workspace analytics
 export const getWorksapceAnalyticsService = async (workspaceId) => {
   try {
     const currentdate = new Date();
