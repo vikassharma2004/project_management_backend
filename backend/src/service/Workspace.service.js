@@ -80,7 +80,7 @@ export const WorksapceMembers = async (workspaceId) => {
     const members = await Member.find({ workspaceId })
       .populate("userId", "name email profilePicture ")
       .populate("role", "name");
-    console.log("members at workspace servie for members", members); 
+    console.log("members at workspace servie for members", members);
     const roles = await Role.find({}, { name: 1, _id: 1 })
       .select("-permissions")
       .lean();
@@ -95,14 +95,14 @@ export const WorksapceMembers = async (workspaceId) => {
 export const getWorksapceAnalyticsService = async (workspaceId) => {
   try {
     const currentdate = new Date();
-    const totaltask = await Task.countDocuments({workspace:workspaceId });
+    const totaltask = await Task.countDocuments({ workspace: workspaceId });
     const overduetask = await Task.countDocuments({
-      workspace:workspaceId,
+      workspace: workspaceId,
       dueDate: { $lt: currentdate },
       status: { $ne: "COMPLETED" },
     });
     const completedtask = await Task.countDocuments({
-     workspace:workspaceId,
+      workspace: workspaceId,
       status: "COMPLETED",
     });
     const analytics = {
@@ -132,7 +132,7 @@ export const ChangeMemberRoleService = async (
     const role = await Role.findById(roleId);
     // console.log(role,"role at change role")
     if (!role) throw new NotFoundError("role not found");
-    console.log("role", role);
+    // console.log("role", role);
     // finds the member
     const member = await Member.findOne({ workspaceId, userId: memberId });
     if (!member) throw new NotFoundError("member not found in workspace");
