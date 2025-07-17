@@ -1,7 +1,10 @@
 import { HTTPSTATUS } from "../config/http.config.js";
 import { permissions } from "../enums/role.enum.js";
+import { NotFoundError } from "../middleware/AppError.js";
 import { catchAsyncError } from "../middleware/asyncErrorHandler.js";
+import { Project } from "../models/projects.model.js";
 import { getMemberRoleInWorkspace } from "../service/member.service.js";
+import mongoose from "mongoose";
 import {
   createTaskService,
   deleteTaskService,
@@ -50,6 +53,14 @@ export const UpdateTaskController = catchAsyncError(async (req, res) => {
   const { role } = await getMemberRoleInWorkspace(userId, workspaceId);
   // check if user has permission
   roleGuard(role, [permissions.EDIT_TASK]);
+  const project = await Project.findById(projectId);
+
+
+
+  // Inside your useEffect:
+  if (!project || project.workspace.toString() != workspaceId) {
+    throw new NotFoundError("Project not found or does not belong to this workspace");
+  }
   const { updatetask } = await updateTaskService(
     workspaceId,
     taskId,

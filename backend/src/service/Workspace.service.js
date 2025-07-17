@@ -79,8 +79,8 @@ export const WorksapceMembers = async (workspaceId) => {
   try {
     const members = await Member.find({ workspaceId })
       .populate("userId", "name email profilePicture ")
-      .populate("role", "role");
-    // console.log("members at workspace servie for members", members);
+      .populate("role", "name");
+    console.log("members at workspace servie for members", members); 
     const roles = await Role.find({}, { name: 1, _id: 1 })
       .select("-permissions")
       .lean();
@@ -95,14 +95,14 @@ export const WorksapceMembers = async (workspaceId) => {
 export const getWorksapceAnalyticsService = async (workspaceId) => {
   try {
     const currentdate = new Date();
-    const totaltask = await Task.countDocuments({ workspaceId });
+    const totaltask = await Task.countDocuments({workspace:workspaceId });
     const overduetask = await Task.countDocuments({
-      workspaceId,
+      workspace:workspaceId,
       dueDate: { $lt: currentdate },
       status: { $ne: "COMPLETED" },
     });
     const completedtask = await Task.countDocuments({
-      workspaceId,
+     workspace:workspaceId,
       status: "COMPLETED",
     });
     const analytics = {

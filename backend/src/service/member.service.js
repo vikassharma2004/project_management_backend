@@ -35,7 +35,7 @@ export const getMemberRoleInWorkspace = async (userId, workspaceId) => {
 export const joinworkspaceService = async (inviteCode, userId) => {
   // find workspace by intive code
   const workspace = await Workspace.findOne({ inviteCode });
-  console.log("workspace", workspace);
+  // console.log("workspace", workspace);
   if (!workspace)
     throw new NotFoundError("Invalid invite code . workspace not found");
   // check if user already exits
@@ -43,7 +43,7 @@ export const joinworkspaceService = async (inviteCode, userId) => {
     userId,
     workspaceId: workspace._id,
   });
-  console.log("existingmember", existingmember);
+  // console.log("existingmember", existingmember);
   if (existingmember) {
     throw new BadRequestError("You are already a member of this workspace");
   }

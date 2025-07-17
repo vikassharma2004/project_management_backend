@@ -65,15 +65,10 @@ export const updateTaskService = async (
   projectId
 ) => {
   try {
-    const project = await Project.findById(projectId);
-    if (!project || project.workspace.toString() !== workspaceId.toString()) {
-      throw new NotFoundException(
-        "Project not found or does not belong to this workspace"
-      );
-    }
-
-    const task = await Task.findById(taskId);
-    if (!task || task.project.toString() !== projectId.toString()) {
+  const task = await Task.findById(taskId);
+    console.log(task.project,"task pro")
+    console.log(task)
+    if (!task || task.project.equals(projectId)) {
       throw new NotFoundError(
         "Task not found or does not belong to this project"
       );
@@ -140,10 +135,12 @@ export const getAllTasksService = async (
         .skip(skip)
         .limit(pageSize)
         .sort({ createdAt: -1 })
-        .populate("assignedTo", "_id name profilePicture -password")
+        .populate("assignedTo", "_id name profilePicture")
         .populate("project", "_id emoji name"),
       Task.countDocuments(query),
     ]);
+    console.log("Task count:", totalCount);
+    console.log("tasks", tasks);
     // console.log("Task count query:", totalCount, tasks.length);
     const totalPages = Math.ceil(totalCount / pageSize);
 
