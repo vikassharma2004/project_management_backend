@@ -5,8 +5,8 @@ import dotenv from "dotenv";
 dotenv.config();
 export const getEnv = (name, defaultValue) => {
     const value = process.env[name];
-   
-    
+
+
     return value !== undefined && value !== '' ? value : defaultValue;
 };
 
